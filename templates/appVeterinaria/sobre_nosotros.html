@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nosotros - Veterinaria Amigos de Patas</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <!-- Overlay para el menú -->
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    
+    <!-- Botón de menú hamburguesa -->
+    <button class="menu-button" onclick="toggleMenu()">☰</button>
+
+    <!-- Sidebar de navegación -->
+    <div class="sidebar" id="sidebar">
+        <button class="close-button" onclick="toggleMenu()">✖</button>
+        <a href="{% url 'inicio' %}">Inicio</a>
+        <a href="{% url 'razas_perros' %}">Razas de Mascotas</a>
+        <a href="{% url 'sobre_nosotros' %}">Sobre Nosotros</a>
+        
+        {% if request.session.user_logged %}
+            <!-- Enlaces visibles solo para usuarios autenticados -->
+            <hr style="border-color: #fff; margin: 10px 0;">
+            <a href="{% url 'clientesVet' %}">Clientes</a>
+            <a href="{% url 'mascotas' %}">Mascotas</a>
+            <a href="{% url 'citas' %}">Citas</a>
+            <a href="{% url 'lista_veterinarios' %}">Veterinarios</a>
+            <a href="{% url 'lista_remedios' %}">Remedios</a>
+            <a href="{% url 'panel_registro' %}">Registrar Datos</a>
+        {% endif %}
+    </div>
+
+    <!-- Header principal -->
+    <header class="main-header">
+        <h1>
+            <img src="{% static 'images/Amigos_de_patas.jpeg' %}" alt="Logo de Veterinaria" class="logo">
+            Sobre Nosotros
+            <img src="{% static 'images/Amigos_de_patas.jpeg' %}" alt="Logo de Veterinaria" class="logo">
+        </h1>
+    </header>
+
+    <div class="content">
+        <div class="info-section">
+            <h2>¿Quiénes Somos?</h2>
+            <p>
+                <strong>Veterinaria Amigos de Patas</strong> es un centro de atención veterinaria dedicado al cuidado integral de tus mascotas. 
+                Con años de experiencia en el sector, nuestro equipo de profesionales altamente capacitados trabaja día a día para garantizar 
+                la salud y el bienestar de perros, gatos y otras especies.
+            </p>
+        </div>
+
+        <div class="info-section">
+            <h2>Nuestra Misión</h2>
+            <p>
+                Proporcionar atención veterinaria de excelencia, con un enfoque humano y profesional, garantizando el mejor cuidado 
+                para cada una de las mascotas que confían en nosotros. Creemos que cada animal merece amor, respeto y atención médica 
+                de calidad.
+            </p>
+        </div>
+
+        <div class="info-section">
+            <h2>Nuestros Servicios</h2>
+            <ul>
+                <li><strong>Consultas Veterinarias:</strong> Atención general, diagnóstico y tratamiento de enfermedades.</li>
+                <li><strong>Cirugías:</strong> Procedimientos quirúrgicos con equipamiento de última generación.</li>
+                <li><strong>Vacunación y Desparasitación:</strong> Programas preventivos para mantener a tu mascota saludable.</li>
+                <li><strong>Control de Salud:</strong> Revisiones periódicas para detectar problemas a tiempo.</li>
+                <li><strong>Urgencias:</strong> Atención de emergencias las 24 horas.</li>
+                <li><strong>Asesoramiento Nutricional:</strong> Guía personalizada sobre alimentación adecuada.</li>
+            </ul>
+        </div>
+
+        <div class="info-section">
+            <h2>Nuestro Equipo</h2>
+            <p>
+                Contamos con un equipo multidisciplinario de veterinarios especializados en diferentes áreas, desde medicina general 
+                hasta especialidades como cirugía, dermatología, cardiología y más. Cada miembro de nuestro equipo comparte la pasión 
+                por el cuidado animal y está comprometido con brindar el mejor servicio posible.
+            </p>
+        </div>
+
+        <div class="info-section">
+            <h2>Nuestros Valores</h2>
+            <ul>
+                <li><strong>Compromiso:</strong> Con la salud y bienestar de cada mascota.</li>
+                <li><strong>Profesionalismo:</strong> Atención médica de alta calidad basada en evidencia científica.</li>
+                <li><strong>Empatía:</strong> Entendemos el vínculo especial entre las mascotas y sus dueños.</li>
+                <li><strong>Innovación:</strong> Incorporamos las últimas tecnologías y técnicas veterinarias.</li>
+                <li><strong>Transparencia:</strong> Comunicación clara y honesta con nuestros clientes.</li>
+            </ul>
+        </div>
+
+        <div class="info-section">
+            <h2>Contáctanos</h2>
+            <p>
+                <strong>Dirección:</strong> [Tu dirección aquí]<br>
+                <strong>Teléfono:</strong> [Tu teléfono aquí]<br>
+                <strong>Email:</strong> contacto@amigosedepatas.cl<br>
+                <strong>Horario:</strong> Lunes a Viernes 9:00 - 20:00 | Sábados 9:00 - 14:00
+            </p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>Veterinaria Amigos de Patas</strong></p>
+        <p>Cuidando a tus mascotas con amor y responsabilidad</p>
+        <p>&copy; 2025 - Todos los derechos reservados</p>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

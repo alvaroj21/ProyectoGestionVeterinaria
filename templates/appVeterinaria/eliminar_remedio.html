@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Remedio - Veterinaria</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .confirmation-container {
+            max-width: 700px;
+            margin: 30px auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px var(--shadow);
+            border-top: 5px solid #f44336;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .btn-danger {
+            display: inline-block;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <h1>Eliminar Remedio</h1>
+    </header>
+    <div class="content">
+        <div class="confirmation-container">
+            <div class="warning-box">
+                <h3 style="color: #856404;">⚠️ ¿Eliminar este remedio?</h3>
+                <p style="color: #856404; font-weight: bold;">Esta acción NO se puede deshacer</p>
+            </div>
+            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <p><strong>Nombre:</strong> {{ remedio.nombre_remedio }}</p>
+                <p><strong>Uso recomendado:</strong> {{ remedio.uso_recomendado }}</p>
+                <p><strong>Frecuencia:</strong> {{ remedio.frecuencia }}</p>
+                <p><strong>Animal:</strong> {{ remedio.animal }}</p>
+            </div>
+            <form method="post" style="text-align: center;">
+                {% csrf_token %}
+                <button type="submit" class="btn-danger" onclick="return confirm('⚠️ ¿Confirmas la eliminación?');">Confirmar Eliminación</button>
+                <a href="{% url 'lista_remedios' %}" class="btn-menu">Cancelar</a>
+            </form>
+        </div>
+    </div>
+    <div class="footer">
+        <p><strong>Veterinaria Amigos de Patas</strong></p>
+        <p>&copy; 2025 - Todos los derechos reservados</p>
+    </div>
+</body>
+</html>

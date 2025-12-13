@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Veterinaria Amigos de Patas</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        /* Estilos para el modal de login */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .close-modal {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close-modal:hover,
+        .close-modal:focus {
+            color: #000;
+        }
+        
+        .modal-content h2 {
+            color: #2c5f2d;
+            margin-bottom: 20px;
+        }
+        
+        .modal-content form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-content input {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .modal-content button {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #2c5f2d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .modal-content button:hover {
+            background-color: #1e4620;
+        }
+        
+        /* Botón de login en el navbar */
+        .login-button {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .login-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%) scale(1.05);
+        }
+        
+        .user-info {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 180px;
+        }
+        
+        .user-info .user-greeting {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .user-info .user-role {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+        
+        .logout-button {
+            padding: 6px 12px;
+            background-color: rgba(211, 47, 47, 0.9);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+        
+        /* Hacer el header posicionable para los controles */
+        .main-header {
+            position: relative;
+        }
+        
+        /* Mensajes de Django */
+        .messages {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1001;
+            max-width: 400px;
+        }
+        
+        .messages .alert {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .messages .alert-success {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .messages .alert-error {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mensajes de Django -->
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        <script>
+            // Auto-cerrar mensajes después de 5 segundos
+            setTimeout(function() {
+                const messages = document.querySelector('.messages');
+                if (messages) {
+                    messages.style.display = 'none';
+                }
+            }, 5000);
+        </script>
+    {% endif %}
+
+    <!-- Modal de Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+            <h2>Iniciar Sesión</h2>
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Usuario" required>
+                <input type="password" name="password" placeholder="Contraseña" required>
+                <button type="submit">Ingresar</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Overlay para el menú -->
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <!-- Botón de menú hamburguesa -->
+    <button class="menu-button" onclick="toggleMenu()">☰</button>
+
+    <!-- Botón Admin solo visible para usuarios staff -->
+    {% if user.is_authenticated and user.is_staff %}
+        <a href="{% url 'admin:index' %}" class="admin-button">Panel Admin</a>
+    {% endif %}
+
+    <!-- Sidebar de navegación -->
+    <div class="sidebar" id="sidebar">
+        <button class="close-button" onclick="toggleMenu()">✖</button>
+        <a href="{% url 'inicio' %}">Inicio</a>
+        <a href="{% url 'razas_perros' %}">Razas de Mascotas</a>
+        <a href="{% url 'sobre_nosotros' %}">Sobre Nosotros</a>
+        
+        {% if request.session.user_logged %}
+            <!-- Enlaces visibles solo para usuarios autenticados -->
+            <hr style="border-color: #fff; margin: 10px 0;">
+            <a href="{% url 'clientesVet' %}">Clientes</a>
+            <a href="{% url 'mascotas' %}">Mascotas</a>
+            <a href="{% url 'citas' %}">Citas</a>
+            <a href="{% url 'lista_veterinarios' %}">Veterinarios</a>
+            <a href="{% url 'lista_remedios' %}">Remedios</a>
+            <a href="{% url 'panel_registro' %}">Registrar Datos</a>
+            
+            {% if request.session.rol == 'Administrador' %}
+                <hr style="border-color: #fff; margin: 10px 0;">
+                <a href="{% url 'lista_usuarios' %}" style="background-color: rgba(255, 152, 0, 0.2);">Usuarios</a>
+                <a href="{% url 'crear_usuario' %}" style="background-color: rgba(76, 175, 80, 0.2);">Crear Usuario</a>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <!-- Header principal -->
+    <header class="main-header">
+        <h1>
+            <img src="{% static 'images/Amigos_de_patas.jpeg' %}" alt="Logo de Veterinaria" class="logo">
+            Bienvenido a Amigos de Patas
+            <img src="{% static 'images/Amigos_de_patas.jpeg' %}" alt="Logo de Veterinaria" class="logo">
+        </h1>
+        
+        <!-- Botón de Login/Usuario dentro del header -->
+        {% if request.session.user_logged %}
+            <div class="user-info">
+                <div class="user-greeting">Hola, {{ request.session.nombre }}!</div>
+                <div class="user-role">{{ request.session.rol }}</div>
+                <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Cerrar Sesión</button>
+                </form>
+            </div>
+        {% else %}
+            <button class="login-button" onclick="openLoginModal()">Iniciar Sesión</button>
+        {% endif %}
+    </header>
+
+    <div class="content">
+        <!-- Sección de perros -->
+        <div class="info-section">
+            <h2>Cuidado y Alimentación de Perros</h2>
+            <img src="{% static 'images/perros_2.jpeg' %}" alt="Perro feliz disfrutando" style="display: block; margin: 10px auto; max-width: 100%; height: auto; border-radius: 10px;">
+            <p><strong>Cuidado de los perros:</strong> El cuidado adecuado de un perro es esencial para garantizar su bienestar. Algunas recomendaciones son:</p>
+            <ul>
+                <li>Proveer un lugar adecuado para dormir.</li>
+                <li>Realizar ejercicio diario según la raza y tamaño.</li>
+                <li>Visitar al veterinario al menos una vez al año.</li>
+                <li>Mantenerlo limpio, incluyendo baños regulares.</li>
+                <li>Protegerlo de las inclemencias del tiempo, especialmente en invierno o calor extremo.</li>
+            </ul>
+            <p><strong>Alimentación de los perros:</strong> La dieta adecuada depende de factores como la edad, el tamaño y la raza. Los perros deben recibir alimentos balanceados que incluyan proteínas de calidad, carbohidratos y grasas saludables. Es recomendable:</p>
+            <ul>
+                <li>Proporcionar alimentos específicos para su edad (cachorros, adultos, senior).</li>
+                <li>Evitar darle comida humana, especialmente chocolate, cebolla y uvas.</li>
+                <li>Asegurarse de que siempre tengan agua fresca disponible.</li>
+            </ul>
+            <p><strong>Salud de los perros:</strong> Para mantener la salud de los perros es fundamental un seguimiento constante de su estado físico y emocional:</p>
+            <ul>
+                <li>Vacunación anual.</li>
+                <li>Desparacitación cada tres meses.</li>
+                <li>Revisión dental periódica.</li>
+                <li>Control del peso para prevenir la obesidad.</li>
+            </ul>
+        </div>
+
+        <!-- Sección de gatos -->
+        <div class="info-section">
+            <h2>Cuidado y Alimentación de Gatos</h2>
+            <img src="{% static 'images/gatos_2.jpeg' %}" alt="Gato descansando" style="display: block; margin: 10px auto; max-width: 100%; height: auto; border-radius: 10px;">
+            <p><strong>Cuidado de los gatos:</strong> Los gatos son animales independientes pero requieren atención en diversas áreas para mantener su bienestar:</p>
+            <ul>
+                <li>Proveer un lugar tranquilo y seguro para descansar.</li>
+                <li>Mantener su caja de arena limpia.</li>
+                <li>Realizar chequeos veterinarios regulares, especialmente para control de parásitos.</li>
+                <li>Proporcionar juguetes para estimular su mente.</li>
+                <li>Si está dentro de la casa, darle acceso a ventanas para que pueda observar el exterior.</li>
+            </ul>
+            <p><strong>Alimentación de los gatos:</strong> Los gatos son carnívoros obligados, por lo que deben alimentarse principalmente de proteínas animales. Es importante que su comida esté bien equilibrada y adaptada a sus necesidades:</p>
+            <ul>
+                <li>Alimentarlos con croquetas o comida húmeda de alta calidad.</li>
+                <li>Asegurarse de que no falte agua fresca a su disposición.</li>
+                <li>Evitar darles alimentos como chocolate, cebolla o ajo, que son tóxicos para ellos.</li>
+            </ul>
+            <p><strong>Salud de los gatos:</strong> La salud de los gatos depende de su alimentación y de visitas periódicas al veterinario para asegurarse de que no desarrollen enfermedades:</p>
+            <ul>
+                <li>Vacunación anual para prevenir enfermedades.</li>
+                <li>Control de parásitos internos y externos.</li>
+                <li>Chequeo de su salud dental y control de peso.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>Veterinaria Amigos de Patas</strong></p>
+        <p>Cuidando a tus mascotas con amor y responsabilidad</p>
+        <p>&copy; 2025 - Todos los derechos reservados</p>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+        
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+        
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+        
+        // Cerrar modal si se hace clic fuera de él
+        window.onclick = function(event) {
+            const modal = document.getElementById('loginModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+

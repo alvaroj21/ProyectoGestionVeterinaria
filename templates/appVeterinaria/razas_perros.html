@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Razas - Veterinaria</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <!-- Overlay para el menú -->
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    
+    <!-- Botón de menú hamburguesa -->
+    <button class="menu-button" onclick="toggleMenu()">☰</button>
+
+    <!-- Sidebar de navegación -->
+    <div class="sidebar" id="sidebar">
+        <button class="close-button" onclick="toggleMenu()">✖</button>
+        <a href="{% url 'inicio' %}">Inicio</a>
+        <a href="{% url 'razas_perros' %}">Razas de Mascotas</a>
+        <a href="{% url 'sobre_nosotros' %}">Sobre Nosotros</a>
+        
+        {% if request.session.user_logged %}
+            <!-- Enlaces visibles solo para usuarios autenticados -->
+            <hr style="border-color: #fff; margin: 10px 0;">
+            <a href="{% url 'clientesVet' %}">Clientes</a>
+            <a href="{% url 'mascotas' %}">Mascotas</a>
+            <a href="{% url 'citas' %}">Citas</a>
+            <a href="{% url 'lista_veterinarios' %}">Veterinarios</a>
+            <a href="{% url 'lista_remedios' %}">Remedios</a>
+            <a href="{% url 'panel_registro' %}">Registrar Datos</a>
+        {% endif %}
+    </div>
+    
+    <header class="main-header">
+        <h1>Razas de Mascotas</h1>
+    </header>
+
+    <div class="content">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Animal</th>
+                        <th>Raza</th>
+                        <th>Nombre Científico</th>
+                        <th>Edad Aproximada de Vida</th>
+                        <th>Alimentación</th>
+                        <th>Tiempo de Paseo</th>
+                        <th>Dato Curioso</th>
+                        <th>Recomendación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for raza in razas_perros %}
+                    <tr>
+                        <td>{{ raza.animal }}</td>
+                        <td>{{ raza.raza }}</td>
+                        <td>{{ raza.nombre_cientifico }}</td>
+                        <td>{{ raza.edad_aprox_vida }}</td>
+                        <td>{{ raza.alimentacion }}</td>
+                        <td>{{ raza.tiempo_paseo }}</td>
+                        <td>{{ raza.dato_curioso }}</td>
+                        <td>{{ raza.recomendacion }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" style="text-align: center;">No hay razas registradas.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <a href="{% url 'inicio' %}" class="btn-menu">← Volver al Menú</a>
+    </div>
+
+    <div class="footer">
+        <p><strong>Veterinaria Amigos de Patas</strong></p>
+        <p>&copy; 2025 - Todos los derechos reservados</p>
+    </div>
+    
+    <script>
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

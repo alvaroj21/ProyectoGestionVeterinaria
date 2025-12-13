@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Clientes - Veterinaria</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .search-box {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .search-box input {
+            padding: 10px 15px;
+            width: 60%;
+            max-width: 500px;
+            border: 2px solid var(--primary-green);
+            border-radius: 25px;
+            font-size: 16px;
+        }
+        .search-box button {
+            padding: 10px 20px;
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+        .search-box button:hover {
+            background-color: var(--dark-green);
+        }
+        .pagination {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .pagination a, .pagination span {
+            display: inline-block;
+            padding: 8px 15px;
+            margin: 0 5px;
+            background-color: var(--white);
+            border: 2px solid var(--primary-green);
+            border-radius: 5px;
+            text-decoration: none;
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+        .pagination .current {
+            background-color: var(--primary-green);
+            color: white;
+        }
+        .pagination a:hover {
+            background-color: var(--light-green);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <h1>Listado de Clientes</h1>
+    </header>
+
+    <div class="content">
+        <!-- Barra de búsqueda -->
+        <div class="search-box">
+            <form method="get">
+                <input type="text" name="search" placeholder="Buscar por nombre, RUT, email, teléfono..." value="{{ search_query }}">
+                <button type="submit">🔍 Buscar</button>
+                {% if search_query %}
+                    <a href="{% url 'clientesVet' %}" class="btn-menu" style="background-color: #f44336; display: inline-block; margin-left: 10px;">Limpiar</a>
+                {% endif %}
+            </form>
+        </div>
+
+        <ul class="data-list">
+            {% for cliente in clientesVet %}
+            <li class="data-item">
+                <strong>Nombre:</strong> {{ cliente.nombre }} {{ cliente.apellido }}<br>
+                <strong>Teléfono:</strong> {{ cliente.telefono }}<br>
+                <strong>Email:</strong> {{ cliente.email }}<br>
+                <strong>RUT:</strong> {{ cliente.rut }}<br>
+                <strong>Dirección:</strong> {{ cliente.direccion }}<br>
+                <a href="{% url 'editar_cliente' cliente.id %}" class="btn-menu" style="background-color: #2196F3; margin-right: 10px;">Editar</a>
+                <a href="{% url 'eliminar_cliente' cliente.id %}" class="btn-menu" style="background-color: #f44336;">Eliminar</a>
+            </li>
+            {% empty %}
+            <li class="data-item">No se encontraron clientes{% if search_query %} con ese criterio de búsqueda{% endif %}.</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Paginación -->
+        {% if page_obj.has_other_pages %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">« Primera</a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">‹ Anterior</a>
+            {% endif %}
+            
+            <span class="current">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Siguiente ›</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Última »</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <a href="{% url 'inicio' %}" class="btn-menu">← Volver al Menú</a>
+    </div>
+
+    <div class="footer">
+        <p><strong>Veterinaria Amigos de Patas</strong></p>
+        <p>&copy; 2025 - Todos los derechos reservados</p>
+    </div>
+</body>
+</html>
+

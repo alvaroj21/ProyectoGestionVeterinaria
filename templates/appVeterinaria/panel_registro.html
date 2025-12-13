@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Registro - Veterinaria</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .registro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .registro-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px var(--shadow);
+            transition: all 0.3s ease;
+            text-align: center;
+            border-left: 5px solid var(--secondary-green);
+        }
+
+        .registro-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px var(--shadow-hover);
+            border-left-color: var(--accent-orange);
+        }
+
+        .registro-card h3 {
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .registro-card p {
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .registro-card a {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .registro-card a:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px var(--shadow-hover);
+        }
+
+        .messages {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <h1>Panel de Registro de Datos</h1>
+    </header>
+
+    <div class="content">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="registro-grid">
+            <div class="registro-card">
+                <h3>Registrar Cliente</h3>
+                <p>Añade un nuevo cliente al sistema con sus datos personales y de contacto.</p>
+                <a href="{% url 'registrar_cliente' %}">Registrar Cliente</a>
+            </div>
+
+            <div class="registro-card">
+                <h3>Registrar Mascota</h3>
+                <p>Registra una nueva mascota con su información básica y características.</p>
+                <a href="{% url 'registrar_mascota' %}">Registrar Mascota</a>
+            </div>
+
+            <div class="registro-card">
+                <h3>Registrar Cita</h3>
+                <p>Agenda una nueva cita para una mascota con un veterinario.</p>
+                <a href="{% url 'registrar_cita' %}">Registrar Cita</a>
+            </div>
+
+            <div class="registro-card">
+                <h3>Registrar Veterinario</h3>
+                <p>Añade un nuevo veterinario al equipo con su especialidad y datos.</p>
+                <a href="{% url 'registrar_veterinario' %}">Registrar Veterinario</a>
+            </div>
+
+            <div class="registro-card">
+                <h3>Registrar Remedio</h3>
+                <p>Añade un nuevo medicamento o remedio al catálogo de la veterinaria.</p>
+                <a href="{% url 'registrar_remedio' %}">Registrar Remedio</a>
+            </div>
+
+            <div class="registro-card">
+                <h3>Registrar Raza</h3>
+                <p>Registra una nueva raza de mascota con sus características específicas.</p>
+                <a href="{% url 'registrar_raza' %}">Registrar Raza</a>
+            </div>
+        </div>
+
+        <a href="{% url 'inicio' %}" class="btn-menu">← Volver al Menú Principal</a>
+    </div>
+
+    <div class="footer">
+        <p><strong>Veterinaria Amigos de Patas</strong></p>
+        <p>&copy; 2025 - Todos los derechos reservados</p>
+    </div>
+</body>
+</html>

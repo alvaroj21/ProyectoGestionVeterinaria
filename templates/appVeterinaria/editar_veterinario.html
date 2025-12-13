@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Veterinario - Veterinaria</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .form-container {
+            max-width: 700px;
+            margin: 30px auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px var(--shadow);
+        }
+        .btn-submit {
+            display: inline-block;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <h1>Editar Veterinario</h1>
+    </header>
+    <div class="content">
+        <div class="form-container">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn-submit">Guardar Cambios</button>
+                <a href="{% url 'lista_veterinarios' %}" class="btn-menu">Cancelar</a>
+            </form>
+        </div>
+    </div>
+    <div class="footer">
+        <p><strong>Veterinaria Amigos de Patas</strong></p>
+        <p>&copy; 2025 - Todos los derechos reservados</p>
+    </div>
+</body>
+</html>
