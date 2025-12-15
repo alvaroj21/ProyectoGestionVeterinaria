@@ -83,24 +83,17 @@ import os
 # Database
 # By default use SQLite for local development (db.sqlite3 present in repo).
 # To use MySQL, set the environment variable USE_SQLITE=0 and provide MYSQL_* vars.
-if os.environ.get('USE_SQLITE', '1') == '1':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'b0uj26xwv82eiartk8wb', 
+        'USER': 'ud5vwg1gg74xawzx',     
+        'PASSWORD': 'g7cgVU2dlJbvhQS4aAqw', 
+        'HOST': 'b0uj26xwv82eiartk8wb-mysql.services.clever-cloud.com',  
+        'PORT': '3306',           
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ.get('MYSQL_DATABASE', 'veterinaria_db'),
-            'USER': os.environ.get('MYSQL_USER', 'root'),
-            'PASSWORD': os.environ.get('MYSQL_PASSWORD', '123456'),
-            'HOST': os.environ.get('MYSQL_HOST', '127.0.0.1'),
-            'PORT': os.environ.get('MYSQL_PORT', '3306'),
-        }
-    }
+}
 
 
 

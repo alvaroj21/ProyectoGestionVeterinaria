@@ -35,8 +35,11 @@ class FormCitaMascota(forms.ModelForm):
             'dato_mascota': forms.Select(attrs={'class': 'form-control'}),
             'fecha_cita': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'motivo_cita': forms.Select(attrs={'class': 'form-control'}),
-            'remedio_cita': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'remedio_cita': forms.SelectMultiple(attrs={'class': 'form-control', 'size': '5'}),
             'veterinario': forms.Select(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'remedio_cita': 'Remedios (opcional - mantén presionado Ctrl para seleccionar varios o deja vacío)',
         }
 
 class FormRemedio(forms.ModelForm):

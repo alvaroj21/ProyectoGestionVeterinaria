@@ -66,6 +66,9 @@ class ClienteVet(models.Model):
         max_length=200,
         validators=[MinLengthValidator(10, "La dirección debe tener al menos 10 caracteres.")]
     )
+    
+    def __str__(self):
+        return f"{self.nombre} {self.apellido}"
 
 # ------------------------------
 class Remedio(models.Model):
@@ -118,7 +121,7 @@ class CitaMascota(models.Model):
     dato_mascota = models.ForeignKey('Mascota', on_delete=models.CASCADE)
     fecha_cita = models.DateField()
     motivo_cita = models.CharField(max_length=100, choices=MOTIVO_CHOICES)
-    remedio_cita = models.ManyToManyField(Remedio)  # Permite múltiples remedios
+    remedio_cita = models.ManyToManyField(Remedio, blank=True)  # Permite múltiples remedios o ninguno
     veterinario = models.ForeignKey('Veterinario', on_delete=models.SET_NULL, null=True, blank=True)
 
 # ------------------------------
@@ -128,7 +131,12 @@ class Mascota(models.Model):
 
     nombre_mascota = models.CharField(max_length=50)
     sexo_mascota = models.CharField(max_length=10, choices=SEXO_CHOICES)
-    edad_mascota = models.IntegerField()
+    edad_mascota = models.IntegerField(
+        validators=[
+            MinValueValidator(0, message="Edad inválida."),
+            MaxValueValidator(30, message="Edad inválida.")
+        ]
+    )
     especie_mascota = models.CharField(max_length=60, choices=ESPECIE_CHOICES)
     raza_mascota = models.CharField(max_length=30)
 
